@@ -1,0 +1,57 @@
+<?php
+echo "<?php\n";
+echo '$title = \'' . $modelName .  ' pages\';
+$description = \'\';
+$this->extend(\'Admin/Layouts/default\');';
+echo "\n?>\n";
+
+?>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <h1><?php echo $modelName . ' index'; ?></h1>
+    </div>
+</div>
+<div class="row" style="overflow-y: auto; max-width: 100%">
+    <div style="margin: 5px">
+        <a href="<?php echo "<?php echo url('$routePrefix/create'); ?>" ?>" class="btn btn-primary">Create new <?php echo lcfirst($modelName) ?></a>
+    </div>
+
+
+    <table class="table table-bordered" >
+        <thead>
+        <tr>
+            <?php foreach($fields as $field): ?>
+            <th><?php echo ucfirst($field['Field']) ?></th>
+            <?php endforeach; ?>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php echo '<?php foreach($entries as $entry): ?>' . PHP_EOL ?>
+        <tr>
+        <?php foreach($fields as $field): ?>
+        <td><?php echo '<?php hh($entry->' . $field['Field'] . '); ?>' ?></td>
+        <?php endforeach; ?>
+            <td><a href="<?php echo "<?php echo url('$routePrefix/edit?id=' . \$entry->id); ?>"; ?>" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+            <a data-href="<?php echo "<?php echo url('$routePrefix/remove?id=' . \$entry->id); ?>"; ?>" class="btn btn-sm btn-danger remove-btn"><i class="fa fa-remove"></i></a></td>
+        </tr>
+        <?php echo '<?php endforeach; ?>' . PHP_EOL ?>
+        </tbody>
+    </table>
+    <div class="paginate">
+        <?php echo '<?php echo $entries->render(); ?>' . PHP_EOL ?>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.remove-btn').click(function () {
+            if (!confirm('Are you sure want to remove this?')) {
+                return;
+            }
+
+            location.replace($(this).data('href'));
+        });
+    })
+</script>

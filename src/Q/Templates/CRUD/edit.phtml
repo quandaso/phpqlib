@@ -1,0 +1,38 @@
+<?php
+echo "<?php\n";
+echo '$title = \'Edit  ' . $modelName .  '\';
+$description = \'\';
+$this->extend(\'Admin/Layouts/default\');';
+echo "\n?>\n";
+
+?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h1><?php echo $modelName . ' edit'; ?></h1>
+    </div>
+</div>
+<div class="row" style="overflow-y: auto; max-width: 100%">
+
+    <form id="<?php echo $modelName . 'Form'?>" method="post" action="<?php echo "<?php echo url('$routePrefix/edit'); ?>" ?>">
+        <?php echo "<?php csrf_field(); ?>"; ?>
+        <input type="hidden" name="id" value="<?php echo "<?php echo \$entry->id;?>" ?>">
+
+        <?php foreach ($fields as $field): if ($field['Field']=== 'id') continue; $id = 'f' . ucfirst($field['Field']); ?>
+            <div class="form-group">
+                <label for="<?php echo $id ?>"><?php echo $field['Field']?></label>
+
+                <?php echo \Q\Console\Commands\CRUD::renderInputField($field, 'edit') . "\n"; ?>
+            </div>
+        <?php endforeach; ?>
+        <div class="form-group">
+            <a href="<?php echo "<?php echo url('$routePrefix/index'); ?>"; ?>" type="submit" class="btn btn-default">Quay lại</a>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $('#<?php echo $modelName . 'Form'?>').validate();
+    });
+</script>
