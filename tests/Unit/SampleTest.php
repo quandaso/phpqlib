@@ -2,12 +2,14 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Q\Models\SimpleModel;
+use Tests\TestCase;
 
 class SampleTest extends TestCase
 {
     public function testSample()
     {
+        $model = new SimpleModel();
         $this->assertEquals(0, 0);
     }
 }

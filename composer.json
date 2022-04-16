@@ -3,7 +3,6 @@
     "type": "library",
     "description": "Simple PHP library",
     "keywords": [],
-    "homepage": "https://symfony.com",
     "license": "MIT",
     "authors": [
         {
@@ -13,10 +12,13 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-pdo": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": { "Q\\": "src/Q" },
+        "files": ["src/functions.php"],
         "exclude-from-classmap": [
             "/Tests/"
         ]

@@ -64,9 +64,28 @@ function pr() {
 
 }
 
-function dd() {
-    call_user_func_array('pr', func_get_args());
-    die;
+if (!function_exists('dd')) {
+    function dd() {
+        call_user_func_array('pr', func_get_args());
+        die;
+    }
+}
+
+global $qConfigs;
+
+function setRootPath(string $root)
+{
+    global $qConfigs;
+    $qConfigs['ROOT'] = $root;
+}
+
+function getRootPath(): string {
+    global $qConfigs;
+    if (!$qConfigs) {
+        $qConfigs = [];
+    }
+
+    return $qConfigs['ROOT'];
 }
 
 function __n($input) {
@@ -94,7 +113,6 @@ function nn($num, $return_value = false) {
 
     echo $n;
 }
-
 
 /**
  * Gets random string with given length
@@ -157,7 +175,6 @@ function db($newInstance = false, $config = 'default')
         }
     }
 
-
     if (!isset($pdoMap[$config])) {
         $dbConfig = config('mysql')[$config];
         extract($dbConfig);
@@ -219,6 +236,16 @@ function curl_get($url) {
     return $server_output;
 }
 
+function config($name) {
+    static $allConfigs = [];
+
+    if (isset ($allConfigs[$name])) {
+        return $allConfigs[$name];
+    }
+
+    $allConfigs[$name] = require getRootPath() . '/configs/' . $name . '.php';
+    return $allConfigs[$name];
+}
 
 function curl_post($url,  $data = array())
 {
@@ -275,7 +302,7 @@ function env($key = null, $default = null)
     static $result;
 
     if (!isset ($result)) {
-        $result = parse_ini_file(ROOT_DIR . '/env.ini');
+        $result = parse_ini_file(getRootPath() . '/env.ini');
     }
 
     if ($key === null) {
@@ -582,7 +609,7 @@ function log_response($response, \Exception $e = null, $httpCode = 200)
         ob_get_clean();
         $msg = $e->getMessage();
         if (strpos($msg, 'table or view not found') !== false) {
-            $debugLogSql = file_get_contents(ROOT_DIR . '/data/debug_logs.sql');
+            $debugLogSql = file_get_contents(getRootPath() . '/data/debug_logs.sql');
             db()->query($debugLogSql);
             die;
         }
